@@ -33,7 +33,10 @@ const requestListener = function (req, res) {
             return;
         }
         else {
-            const exists = fs.existsSync(`${public_dir}/${pathItem}`);
+            const root = fsPath.resolve(public_dir);
+            const target = fsPath.resolve(root, pathItem);
+            const inside = target === root || target.startsWith(root + fsPath.sep);
+            const exists = inside && fs.existsSync(`${public_dir}/${pathItem}`);
 
             if (!exists) {
                 res.writeHead(404);
