@@ -51,8 +51,15 @@ const requestListener = function (req, res) {
         if (stat && stat.isFile()) {
             doFile(`${public_dir}/${pathItem}`,req,res);
         }
-        else if ((pathItem === "" || pathItem.endsWith('/')) && stat && stat.isDirectory()) {
-            doDir(`${public_dir}/${pathItem}`,pathItem,req,res); 
+        else if (stat && stat.isDirectory()) {
+            if (pathItem === "" || pathItem.endsWith('/')) {
+                doDir(`${public_dir}/${pathItem}`,pathItem,req,res);
+            }
+            else {
+                res.writeHead(301, { 'Location': `${url.pathname}/${url.search}` });
+                res.end();
+                logger.info(`${address} - ${req.method} ${req.url} [301] 0`);
+            }
         }
         else {
             res.writeHead(404);
