@@ -21,7 +21,8 @@ log4js.configure({
 });
 
 const requestListener = function (req, res) {
-    const pathItem = req.url.substring(1);
+    const url = new URL(req.url, 'http://localhost');
+    const pathItem = decodeURIComponent(url.pathname.substring(1));
     const address = req.socket.address()['address'];
 
     try {
