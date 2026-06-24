@@ -96,7 +96,7 @@ function registryEntry(pathItem) {
 }
 
 function doFile(path,req,res) {
-    const content = fs.readFileSync(path, { encoding: 'utf-8'});
+    const content = fs.readFileSync(path);
     if (fs.existsSync(`${path}.meta`)) {
         const headers = JSON.parse(fs.readFileSync(`${path}.meta`, { encoding : 'utf-8'}));
         Object.keys(headers).forEach( (key) => {
@@ -151,7 +151,7 @@ function doDir(path,pathItem,req,res) {
 
 function start_server(options) {
     port = options['port'] ?? 8000 ;
-    host = options['host'] ?? localhost ;
+    host = options['host'] ?? 'localhost' ;
     base = options['base'];
     public_dir = options['public'] ?? './public'; 
 
