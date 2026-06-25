@@ -11,9 +11,17 @@ let registry = [] ;
 const log4js = require('log4js');
 const logger = log4js.getLogger();
 
+log4js.addLayout('json', () => (e) => JSON.stringify({
+    ts: e.startTime,
+    level: e.level.levelStr,
+    category: e.categoryName,
+    msg: require('util').format(...e.data)
+}));
+
 log4js.configure({
     appenders: {
-      stderr: { type: 'stderr' }
+      stderr: { type: 'stderr',
+        layout: { type: process.env.LOG_FORMAT === 'json' ? 'json' : 'colored' } }
     },
     categories: {
       default: { appenders: ['stderr'], level: process.env.LOG4JS ?? 'INFO' }
